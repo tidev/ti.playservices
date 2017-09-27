@@ -1,0 +1,110 @@
+name: Modules.PlayServices
+summary: Allows a Titanium application or module to use Google Play Services
+platforms: [android]
+since: {android: "6.0.0"}
+extends: Titanium.Module
+description: |
+   Google Play Services is required by application developers to access Google service APIs, such as
+   Google Maps, Google Analytics etc...
+
+    ### Getting Started
+
+    Add the module as a dependency to your application by adding a **`<module>`** item to the
+    **`<modules>`** element of your `tiapp.xml` file:
+
+        <ti:app>
+          ...
+          <modules>
+            <module platform="android">ti.playservices</module>
+          </modules>
+          ...
+        </ti:app>
+
+    Or include the module as a dependency to a native module by adding a **`<module>`** item to the
+    **`<modules>`** element of your `timodule.xml` file:
+
+        <ti:module>
+          ...
+          <modules>
+            <module platform="android">ti.playservices</module>
+          </modules>
+          ...
+        </ti:module>
+
+    Use `require()` to access the module from JavaScript:
+
+        var PlayServices = require('ti.playservices');
+
+    The `PlayServices` variable is a reference to the module. Make API calls using this reference:
+
+        var playServicesAvailable = PlayServices.isGooglePlayServicesAvailable();
+
+methods:    
+  - name: makeGooglePlayServicesAvailable
+    summary: Attempts to make Google Play services available on this device.
+    since: "11.0.40"
+
+  - name: isGooglePlayServicesAvailable
+    summary: Verifies that Google Play services is installed and enabled on this device.
+    description: |
+        And that the version installed on this device is no older than
+        the one required by this client.
+    since: "11.0.40"
+    returns:
+        type: Number
+        constant: [Modules.PlayServices.RESULT_*]
+
+  - name: isUserResolvableError
+    summary: Checks to see if device is configured for Touch ID authentication.
+    since: "11.0.40"
+    returns:
+        type: Boolean
+
+  - name: getErrorString
+    summary: Determines if the current device supports Touch ID.
+    since: "11.0.40"
+    returns:
+        type: String
+
+properties:    
+  - name: GOOGLE_PLAY_SERVICES_PACKAGE
+    summary: Package name for Google Play services.
+    type: String
+    permission: read-only
+    since: "11.0.40"
+    
+  - name: GOOGLE_PLAY_SERVICES_VERSION_CODE
+    summary: Google Play services client library version.
+    type: Number
+    permission: read-only
+    since: "11.0.40"
+
+  - name: RESULT_SUCCESS
+    summary: The connection was successful.
+    type: Number
+    permission: read-only
+    since: "11.0.40"
+
+  - name: RESULT_SERVICE_MISSING
+    summary: Google Play services is missing on this device.
+    type: Number
+    permission: read-only
+    since: "11.0.40"
+
+  - name: RESULT_SERVICE_UPDATING
+    summary: Google Play service is currently being updated on this device.
+    type: Number
+    permission: read-only
+    since: "11.0.40"
+
+  - name: RESULT_SERVICE_VERSION_UPDATE_REQUIRED
+    summary: The installed version of Google Play services is out of date.
+    type: Number
+    permission: read-only
+    since: "11.0.40"
+
+  - name: RESULT_SERVICE_INVALID
+    summary: The version of the Google Play services installed on this device is not authentic.
+    type: Number
+    permission: read-only
+    since: "11.0.40"
