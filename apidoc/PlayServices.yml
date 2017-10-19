@@ -1,7 +1,7 @@
 name: Modules.PlayServices
 summary: Allows a Titanium application or module to use Google Play Services
 platforms: [android]
-since: {android: "6.0.0"}
+since: {android: "6.3.1"}
 extends: Titanium.Module
 description: |
    Google Play Services is required by application developers to access Google service APIs, such as
