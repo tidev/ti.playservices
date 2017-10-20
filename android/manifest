@@ -7,11 +7,11 @@ apiversion: 3
 architectures: armeabi-v7a x86
 description: Titanium Google Play Services module.
 license: Apache Public License v2
-copyright: Copyright (c) 2017 by Axway
+copyright: Copyright (c) 2017 by Axway Appcelerator
 
 # these should not be edited
 name: playservices
 moduleid: ti.playservices
 guid: 32184149-411f-436b-92a8-c6ddb98a5fb6
 platform: android
-minsdk: 6.0.0
+minsdk: 6.3.0
