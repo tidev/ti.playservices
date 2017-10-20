@@ -1,11 +1,11 @@
 name: Modules.PlayServices
-summary: Allows a Titanium application or module to use Google Play Services
+summary: Allows a Titanium application or module to use Google Play Services.
 platforms: [android]
-since: {android: "6.3.1"}
+since: { android: "6.3.1" }
 extends: Titanium.Module
 description: |
    Google Play Services is required by application developers to access Google service APIs, such as
-   Google Maps, Google Analytics etc...
+   Google Maps, Google Analytics, Firebase etc ... .
 
     ### Getting Started
 
@@ -92,7 +92,7 @@ properties:
     since: "11.0.40"
 
   - name: RESULT_SERVICE_UPDATING
-    summary: Google Play service is currently being updated on this device.
+    summary: Google Play services is currently being updated on this device.
     type: Number
     permission: read-only
     since: "11.0.40"
