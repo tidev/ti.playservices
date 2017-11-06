@@ -4,10 +4,10 @@ platforms: [android]
 since: { android: "6.3.1" }
 extends: Titanium.Module
 description: |
-   Google Play Services is required by application developers to access Google service APIs, such as
-   Google Maps, Google Analytics, Firebase etc ... .
+    Google Play Services is required by application developers to access Google service APIs such as
+    Google Maps, Google Analytics, Firebase, etc.
 
-    ### Getting Started
+    ## Getting Started
 
     Add the module as a dependency to your application by adding a **`<module>`** item to the
     **`<modules>`** element of your `tiapp.xml` file:
