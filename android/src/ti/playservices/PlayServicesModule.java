@@ -4,7 +4,7 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
-package ti.playervices;
+package ti.playservices;
 
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.KrollModule;
@@ -13,7 +13,7 @@ import org.appcelerator.titanium.TiApplication;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.ConnectionResult;
 
-@Kroll.module(name="PlayServices", id="ti.playervices")
+@Kroll.module(name="PlayServices", id="ti.playservices")
 public class PlayServicesModule extends KrollModule
 {
 	private static final String TAG = "TiPlayServices";
