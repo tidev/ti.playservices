@@ -7,12 +7,10 @@
 	</div>
 </p>
 
-Requirements
----------------
-- Titanium Mobile SDK 6.3.1.GA or later
+## Requirements
+- Titanium Mobile SDK 7.0.0 or later (release 12/2017)
 
-Example
----------------
+## Example
 Add the module as a dependency to your application by adding a `<module>` item to the `<modules>` element of your `tiapp.xml` file:
 ```XML
 <ti:app>
@@ -47,16 +45,13 @@ Or include the module as a dependency to a native module by adding a `<module>` 
 
 For a detailed API example please see [android/example/app.js](https://github.com/appcelerator-modules/ti.playservices/blob/master/android/example/app.js)
 
-Build
----------------
+## Build
 `appc run -p android --build-only` from the `android` directory
 
-Author
----------------
+## Author
 Axway
 
-License
----------------
+## License
 Apache 2.0
 
 Contributing
