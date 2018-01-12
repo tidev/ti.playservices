@@ -1,3 +1,5 @@
 .DS_Store
 /android/java-sources.txt
 /android/build
+/android/libs
+/android/dist
