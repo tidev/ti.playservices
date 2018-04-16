@@ -1,8 +1,9 @@
-@Library('pipeline-library') _
+library 'pipeline-library@sdkURL'
 
 buildModule {
-	// defaults:
-	// nodeVersion = '8.2.1' // Must have version set up on Jenkins master before it can be changed
-	sdkVersion = '7.0.0.v20171107015208' // use a master build with ARM64 support
-	// androidAPILevel = '23' // if changed, must install on build nodes
+	// Right now just point at a build of the SDK from the PR. I had to manually upload it to S3 to be able to point at it.
+	// How can we better solve this chicken and egg problem in the future? Use a long-running feature branch of the SDK and publish the zips to s3?
+	sdkVersion = '8.0.0.v20180416105448'
+	sdkURL = 'https://s3.amazonaws.com/builds.appcelerator.com/mobile/custom/mobilesdk-8.0.0.v20180416105448-osx.zip'
+	androidNDK = 'r16b'
 }
