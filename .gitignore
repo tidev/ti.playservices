@@ -1,1 +1,12 @@
+tmp
+bin
+build
+*.zip
 .DS_Store
+.project
+android/libs
+android/build.properties
+android/dist
+android/manifest.bak
+android/java-sources.txt
+/ios/metadata.json
