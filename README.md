@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://lh4.ggpht.com/fX0oncZTwPIETqwHYjYzW2o44N3NqsAB_X16KTJzTDFK4UdcGrtKaMxuVtCX-3Ovzqw=w300-rw" height="128" width="128">
+	<img src="https://lh4.ggpht.com/fX0oncZTwPIETqwHYjYzW2o44N3NqsAB_X16KTJzTDFK4UdcGrtKaMxuVtCX-3Ovzqw=w300" height="128" width="128">
 	<h1 align="center">ti.playservices</h1>
 	<h5 align="center">To provide Google Play Services for Titanium modules and applications</h6>
 	<div align="center">
