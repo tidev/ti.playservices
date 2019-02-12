@@ -1,6 +1,6 @@
 /**
  * Axway Appcelerator Titanium - ti.playservices
- * Copyright (c) 2018 by Axway. All Rights Reserved.
+ * Copyright (c) 2018-2019 by Axway. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
@@ -22,10 +22,14 @@ async function getList (url) {
     let list = [];
     await rp(options)
         .then(async ($) => {
+
+            // get libraries
             $('.im-title').each((i, element) => {
                 const href = $(element.children[1]).attr('href').split('/')[1];
                 list.push(href);
             });
+
+            // navigate to next page
             const next = $('.search-nav').children().last();
             if (!next.hasClass('current')) {
                 const nextPage = next.children().last().attr('href');
@@ -36,6 +40,7 @@ async function getList (url) {
     return list;
 }
 
+// obtain latest version of library
 async function getLatestVersion (url) {
     const options = {
         uri: url,
@@ -56,6 +61,7 @@ async function getLatestVersion (url) {
     return version;
 }
 
+// obtain list of files
 async function getFiles (url, filter) {
     const options = {
         uri: url,
