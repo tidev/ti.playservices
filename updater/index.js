@@ -96,11 +96,12 @@ async function getFiles (url, filter) {
 
     // obtain Google Play Services repository libraries
     const libraries = await getList(repository);
+    const blacklist = [ 'play-services-contextmanager' ];
 
     for (const library of libraries) {
 
         // filter valid libraries
-        if (library.startsWith('play-')) {
+        if (library.startsWith('play-') && !blacklist.includes(library)) {
 
             // obtain latest version of library
             const version = await getLatestVersion(repository + '/' + library);
