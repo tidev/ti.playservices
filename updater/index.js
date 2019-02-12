@@ -9,7 +9,7 @@ const rp = require('request-promise');
 const cheerio = require('cheerio');
 const fs = require('fs');
 
-const repository = 'http://repo.spring.io/plugins-release/com/google/android/gms/';
+const repository = 'https://mvnrepository.com/artifact/com.google.android.gms';
 
 // obtain list from repository
 async function getList (url) {
@@ -21,11 +21,62 @@ async function getList (url) {
     };
     let list = [];
     await rp(options)
-        .then(($) => {
-            $('a').each((i, element) => {
+        .then(async ($) => {
+            $('.im-title').each((i, element) => {
+                const href = $(element.children[1]).attr('href').split('/')[1];
+                list.push(href);
+            });
+            const next = $('.search-nav').children().last();
+            if (!next.hasClass('current')) {
+                const nextPage = next.children().last().attr('href');
+                list = list.concat(await getList(repository + nextPage));
+            }
+        });
+
+    return list;
+}
+
+async function getLatestVersion (url) {
+    const options = {
+        uri: url,
+        transform: (body) => {
+            return cheerio.load(body);
+        }
+    };
+    let version = undefined;
+    await rp(options)
+        .then(async ($) => {
+            $('.release').each((i, element) => {
+                const href = $(element).attr('href').split('/')[1];
+                version = href;
+                return false;
+            });
+        });
+
+    return version;
+}
+
+async function getFiles (url, filter) {
+    const options = {
+        uri: url,
+        transform: (body) => {
+            return cheerio.load(body);
+        }
+    };
+    let list = [];
+    await rp(options)
+        .then(async ($) => {
+            $('.vbtn').each((i, element) => {
                 const href = $(element).attr('href');
-                if (href != '../') {
-                    list.push(href);
+                if (href) {
+                    const type = href.split('.').pop();
+                    if (filter) {
+                        if (filter.includes(type)) {
+                            list.push(href);
+                        }
+                    } else {
+                        list.push(href);
+                    }
                 }
             });
         });
@@ -35,6 +86,8 @@ async function getList (url) {
 
 (async function () {
 
+    console.log(`Obtaining latest Play Services libraries...`);
+
     // obtain Google Play Services repository libraries
     const libraries = await getList(repository);
 
@@ -43,43 +96,17 @@ async function getList (url) {
         // filter valid libraries
         if (library.startsWith('play-')) {
 
-            // obtain versions of library
-            const versions = await getList(repository + library);
+            // obtain latest version of library
+            const version = await getLatestVersion(repository + '/' + library);
 
-            // determine latest version
-            let latest;
-            let latestNumeric;
-            for (const version of versions) {
-                
-                const segments = version.replace('/', '').split('.');
-                let expandedVersion = '';
-                for (let segment of segments) {
-                    while (segment.length <= 3) {
-                        segment = '0' + segment;
-                    }
-                    expandedVersion += segment;
-                }
-                let numeric = parseInt(expandedVersion);
-                
-                // have we found a later version?
-                if (!latestNumeric || latestNumeric < numeric) {
-                    latestNumeric = numeric;
-                    latest = version;
-                }
-            }
+            // obtain library .aar
+            const archives = await getFiles(repository + '/' + library + '/' + version, 'aar');
+            for (const aar of archives) {
 
-            // if we have found a library, download the latest version
-            if (latest) {
-                const files = await getList(repository + library + latest);
+                console.log(`  ${library}-${version}`);
 
-                for (const file of files) {
-
-                    // only download Android Archive
-                    if (file.endsWith('.aar')) {
-                        rp(repository + library + latest + file).pipe(fs.createWriteStream('../android/lib/' + file));
-                        console.log(file);
-                    }
-                }
+                // download aar
+                rp(aar).pipe(fs.createWriteStream(`../android/lib/${library}-${version}.aar`));
             }
         }
     }

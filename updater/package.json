@@ -1,0 +1,28 @@
+{
+  "name": "updater",
+  "version": "1.0.0",
+  "description": "Download latest Play Services libraries for ti.playservices",
+  "main": "index.js",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appcelerator-modules/ti.playservices.git"
+  },
+  "keywords": [
+    "ti.playservices"
+  ],
+  "author": "Gary Mathews",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/appcelerator-modules/ti.playservices/issues"
+  },
+  "homepage": "https://github.com/appcelerator-modules/ti.playservices#readme"
+}
