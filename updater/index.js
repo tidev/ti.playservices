@@ -96,12 +96,42 @@ async function getFiles (url, filter) {
 
     // obtain Google Play Services repository libraries
     const libraries = await getList(repository);
-    const blacklist = [ 'play-services-contextmanager' ];
+    const blacklist = [
+        'play-services-contextmanager',
+        'play-services-measurement',
+        'play-services-instantapps',
+        'play-services-vision',
+        'play-services-vision-common',
+        'play-services-panorama',
+        'play-services-drive',
+        'play-services-plus',
+        'play-services-safetynet',
+        'play-services-wearable',
+        'play-services-fitness',
+        'play-services-games',
+        'play-services-cast',
+        'play-services-cast-framework',
+        'play-services-appinvite',
+        'play-services-appindexing',
+        'play-services-all-wear',
+        'play-services-fido',
+        'play-services-gass',
+        'play-services-tagmanager',
+        'play-services-awareness',
+        'play-services-clearcut',
+        'play-services-ads-lite',
+        'play-services-phenotype',
+        'play-services-vision-image-label',
+        'play-services-tagmanager-v4-impl',
+        'play-services-tagmanager-api',
+        'play-services-afs-native',
+        'play-services'
+    ];
 
     for (const library of libraries) {
 
         // filter valid libraries
-        if (library.startsWith('play-') && !blacklist.includes(library)) {
+        if (library.startsWith('play-') && !library.endsWith('license') && !blacklist.includes(library)) {
 
             // obtain latest version of library
             const version = await getLatestVersion(repository + '/' + library);
