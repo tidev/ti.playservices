@@ -24,15 +24,37 @@ Add the module as a dependency to your application by adding a `<module>` item t
 
 Use `require()` to access the module from JavaScript:
 ```JS
-    var PlayServices = require('ti.playservices');
+    const PlayServices = require('ti.playservices');
 ```
 
 The `PlayServices` variable is a reference to the module. Make API calls using this reference:
 ```JS
-    var playServicesAvailable = PlayServices.isGooglePlayServicesAvailable();
+    const playServicesAvailable = PlayServices.isGooglePlayServicesAvailable();
 ```
 
-Or include the module as a dependency to a native module by adding a `<module>` item to the `<modules>` element of your `timodule.xml` file:
+It is highly recommended to detect availability issues before using Play Services:
+```JS
+const PlayServices = require('ti.playservices');
+
+const win = Ti.UI.createWindow({ backgroundColor: 'gray' });
+const btn = Ti.UI.createButton({ title: 'CHECK PLAY SERVICES' });
+
+btn.addEventListener('click', () => {
+    PlayServices.makeGooglePlayServicesAvailable((e) => {
+        if (e.success) {
+            alert(`Play Services: ${PlayServices.GOOGLE_PLAY_SERVICES_VERSION_CODE}`);
+            // Use Play Services
+        } else {
+            alert(`Play Services is not available.`);
+        }
+    });
+});
+
+win.add(btn);
+win.open();
+```
+
+To include Play Services libraries with your native module include the module as a dependency by adding a `<module>` item to the `<modules>` element of your `timodule.xml` file:
 ```XML
 <ti:module>
   ...
