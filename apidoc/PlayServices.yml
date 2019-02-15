@@ -42,7 +42,12 @@ description: |
 methods:    
   - name: makeGooglePlayServicesAvailable
     summary: Attempts to make Google Play services available on this device.
+    description: `callback` parameter is only available since 16.1.1.
     since: "11.0.40"
+    parameters:
+      - name: callback
+        summary: Callback fired with the result determining Google Play Services availability.
+        type: Callback<Object>
 
   - name: isGooglePlayServicesAvailable
     summary: Verifies that Google Play services is installed and enabled on this device.
