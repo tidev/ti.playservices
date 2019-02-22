@@ -98,6 +98,7 @@ async function getFiles (url, filter) {
     const libraries = await getList(repository);
     const blacklist = [
         'play-services-contextmanager',
+        'play-services-measurement',
         'play-services-instantapps',
         'play-services-vision',
         'play-services-vision-common',
@@ -133,7 +134,7 @@ async function getFiles (url, filter) {
         if (library.startsWith('play-') && !library.endsWith('license') && !blacklist.includes(library)) {
 
             // obtain latest version of library
-            const version = await getLatestVersion(repository + '/' + library);
+            const version = await getLatestVersion(repository + '/' + library + '?repo=google');
 
             // obtain library .aar
             const archives = await getFiles(repository + '/' + library + '/' + version, 'aar');
