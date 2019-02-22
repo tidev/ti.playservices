@@ -98,7 +98,6 @@ async function getFiles (url, filter) {
     const libraries = await getList(repository);
     const blacklist = [
         'play-services-contextmanager',
-        'play-services-measurement',
         'play-services-instantapps',
         'play-services-vision',
         'play-services-vision-common',
