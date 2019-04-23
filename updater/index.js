@@ -5,9 +5,11 @@
  * Please see the LICENSE included with this distribution for details.
  */
 
+const request = require('request');
 const rp = require('request-promise');
 const cheerio = require('cheerio');
-const fs = require('fs');
+const fs = require('fs-extra');
+const path = require('path');
 
 const repository = 'https://mvnrepository.com/artifact/com.google.android.gms';
 
@@ -90,8 +92,10 @@ async function getFiles (url, filter) {
     return list;
 }
 
-(async function () {
-
+/**
+ * @param {string} repository maven repository to query
+ */
+async function gatherLibraries(repository) {
     console.log(`Obtaining latest Play Services libraries...`);
 
     // obtain Google Play Services repository libraries
@@ -128,23 +132,53 @@ async function getFiles (url, filter) {
         'play-services'
     ];
 
-    for (const library of libraries) {
+    // filter valid libraries
+    return libraries.filter(library => {
+        return library.startsWith('play-') && !library.endsWith('license') && !blacklist.includes(library);
+    });
+}
 
-        // filter valid libraries
-        if (library.startsWith('play-') && !library.endsWith('license') && !blacklist.includes(library)) {
-
-            // obtain latest version of library
-            const version = await getLatestVersion(repository + '/' + library + '?repo=google');
-
-            // obtain library .aar
-            const archives = await getFiles(repository + '/' + library + '/' + version, 'aar');
-            for (const aar of archives) {
-
-                console.log(`  ${library}-${version}`);
-
-                // download aar
-                rp(aar).pipe(fs.createWriteStream(`../android/lib/${library}-${version}.aar`));
-            }
-        }
+/**
+ * 
+ * @param {string} destDir directory to place the downloaded AAR files
+ * @param {string} repository name of maven repository
+ * @param {string} library name of google library
+ * @param {string} [version='latest'] version to download. defaults to 'latest'. 'latest' will grab latest from maven repository.
+ */
+async function downloadLibrary(destDir, repository, library, version = 'latest') {
+    if (!version || version === 'latest') {
+        // obtain latest version of library
+        version = await getLatestVersion(`${repository}/${library}?repo=google`);
     }
+        
+    // obtain library .aar
+    const archives = await getFiles(`${repository}/${library}/${version}`, 'aar');
+    if (archives.length !== 1) {
+        throw new Error(`Expected single URL to download library: ${library}/${version}, but got: ${archives}`);
+    }
+    console.log(`  ${library}-${version}`);
+    // download aar
+    return pipe(archives[0], path.join(destDir, `${library}-${version}.aar`));
+}
+
+/**
+ * 
+ * @param {string} url URL to download
+ * @param {string} dest destination file path
+ */
+async function pipe(url, dest) {
+    return new Promise((resolve, reject) => {
+        const writable = fs.createWriteStream(dest);
+        const readable = request(url).pipe(writable);
+        writable.on('finish', () => resolve());
+        readable.on('error', reject);
+        writable.on('error', reject);
+    });
+}
+
+(async function main() {
+    const libraries = await gatherLibraries(repository);
+    const destDir = path.join(__dirname, '../android/lib/');
+    await fs.ensureDir(destDir);
+    return Promise.all(libraries.map(l => downloadLibrary(destDir, repository, l)));
 })();
