@@ -7,3 +7,4 @@ TESTS-*.xml
 android/build/
 android/java-sources.txt
 android/dist/
+android/lib/*.aar

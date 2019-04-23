@@ -6,7 +6,8 @@
   "scripts": {
     "test": "karma start test/unit/karma.unit.config.js",
     "test:android": "npm test -- --browsers android",
-    "update": "node updater/index.js"
+    "ci": "node updater/index.js ci",
+    "upgrade": "node updater/index.js upgrade"
   },
   "author": "Gary Mathews",
   "license": "ISC",

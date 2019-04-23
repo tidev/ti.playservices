@@ -96,8 +96,6 @@ async function getFiles (url, filter) {
  * @param {string} repository maven repository to query
  */
 async function gatherLibraries(repository) {
-    console.log(`Obtaining latest Play Services libraries...`);
-
     // obtain Google Play Services repository libraries
     const libraries = await getList(repository);
     const blacklist = [
@@ -144,6 +142,7 @@ async function gatherLibraries(repository) {
  * @param {string} repository name of maven repository
  * @param {string} library name of google library
  * @param {string} [version='latest'] version to download. defaults to 'latest'. 'latest' will grab latest from maven repository.
+ * @returns {Promise<string} url of downloaded library/aar
  */
 async function downloadLibrary(destDir, repository, library, version = 'latest') {
     if (!version || version === 'latest') {
@@ -156,9 +155,15 @@ async function downloadLibrary(destDir, repository, library, version = 'latest')
     if (archives.length !== 1) {
         throw new Error(`Expected single URL to download library: ${library}/${version}, but got: ${archives}`);
     }
-    console.log(`  ${library}-${version}`);
+    const url = archives[0];
+    const name = `${library}-${version}.aar`;
     // download aar
-    return pipe(archives[0], path.join(destDir, `${library}-${version}.aar`));
+    await pipe(url, path.join(destDir, name));
+    // TODO: Add a sha/hash/integrity value?
+    return {
+        url,
+        name
+    };
 }
 
 /**
@@ -167,6 +172,7 @@ async function downloadLibrary(destDir, repository, library, version = 'latest')
  * @param {string} dest destination file path
  */
 async function pipe(url, dest) {
+    console.log(`  ${dest}`);
     return new Promise((resolve, reject) => {
         const writable = fs.createWriteStream(dest);
         const readable = request(url).pipe(writable);
@@ -176,9 +182,32 @@ async function pipe(url, dest) {
     });
 }
 
-(async function main() {
+/**
+ * Grab the latest versions of all the libraries, download them, update our lockfile
+ */
+async function upgrade() {
+    console.log(`Obtaining latest Play Services libraries...`);
     const libraries = await gatherLibraries(repository);
     const destDir = path.join(__dirname, '../android/lib/');
-    await fs.ensureDir(destDir);
-    return Promise.all(libraries.map(l => downloadLibrary(destDir, repository, l)));
+    await fs.emptyDir(destDir);
+    const downloaded = await Promise.all(libraries.map(l => downloadLibrary(destDir, repository, l)));
+    return fs.writeJSON(path.join(__dirname, 'libraries-lock.json'), downloaded, { spaces: '\t' });
+}
+
+/**
+ * Grab the exact versions of the libraries we've got written in our lockfile
+ */
+async function ci() {
+    console.log(`Obtaining Play Services libraries from lockfile...`);
+    const json = await fs.readJSON(path.join(__dirname, 'libraries-lock.json'));
+    const destDir = path.join(__dirname, '../android/lib/');
+    await fs.emptyDir(destDir);
+    return Promise.all(json.map(l => pipe(l.url, path.join(destDir, l.name))));
+}
+
+(async function main() {
+    if (process.argv.length >= 3 && process.argv[2] == 'upgrade') {
+        return upgrade();
+    }
+    return ci();
 })();
