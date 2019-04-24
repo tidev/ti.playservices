@@ -1,6 +1,6 @@
 /**
  * Axway Appcelerator Titanium - ti.playservices
- * Copyright (c) 2018-2019 by Axway. All Rights Reserved.
+ * Copyright (c) 2018-Present by Axway. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
@@ -10,6 +10,7 @@ const rp = require('request-promise');
 const cheerio = require('cheerio');
 const fs = require('fs-extra');
 const path = require('path');
+const ssri = require('ssri');
 
 const repository = 'https://mvnrepository.com/artifact/com.google.android.gms';
 
@@ -157,30 +158,79 @@ async function downloadLibrary(destDir, repository, library, version = 'latest')
     }
     const url = archives[0];
     const name = `${library}-${version}.aar`;
+    const destination = path.join(destDir, name);
     // download aar
-    await pipe(url, path.join(destDir, name));
-    // TODO: Add a sha/hash/integrity value?
+    await download(url, destination);
+    // Add a sha/hash/integrity value?
+    const hash = await ssri.fromStream(fs.createReadStream(destination));
     return {
         url,
-        name
+        name,
+        integrity: hash.toString()
     };
 }
 
 /**
- * 
+ * Downloads a file to a destination path.
  * @param {string} url URL to download
  * @param {string} dest destination file path
  */
-async function pipe(url, dest) {
+async function download(url, dest) {
     console.log(`  ${dest}`);
     return new Promise((resolve, reject) => {
         const writable = fs.createWriteStream(dest);
         const readable = request(url).pipe(writable);
-        writable.on('finish', () => resolve());
+        writable.on('finish', () => resolve(dest));
         readable.on('error', reject);
         writable.on('error', reject);
     });
 }
+
+/**
+ * Downloads a file and verifies the integrity hash matches (or throws)
+ * @param {string} url URL to download
+ * @param {string} downloadPath path to save the file
+ * @param {string} integrity ssri integrity hash value to confirm contents
+ * @return {Promise<string>} the path to the downloaded (and verified) file
+ */
+async function downloadWithIntegrity(url, downloadPath, integrity) {
+	const file = await download(url, downloadPath);
+
+	// Verify integrity!
+	await ssri.checkStream(fs.createReadStream(file), integrity);
+	return file;
+}
+
+/**
+ * If necessary, downloads the given url and verifies the integrity hash. If the file already exists, verifies the integrity hash.
+ * If teh file exists and fails the integrity check, re-downloads from URL and verifies integrity hash.
+ * @param {string} url URL to download
+ * @param {string} destination where to save the file
+ * @param {string} integrity ssri integrity hash
+ * @returns {Promise<string>} path to file
+ */
+async function downloadIfNecessary(url, destination, integrity) {
+	if (!integrity) {
+		throw new Error(`No "integrity" value given for ${url}, may need to run "upgrade" to generate new library listing with updated integrity hashes.`);
+	}
+
+	// Check if file already exists and passes integrity check!
+	if (await fs.exists(destination)) {
+		try {
+			// if it passes integrity check, we're all good, return path to file
+			await ssri.checkStream(fs.createReadStream(destination), integrity);
+			// cached copy is still valid, integrity hash matches
+			return destination;
+		} catch (e) {
+			// hash doesn't match. Wipe the cached version and re-download
+			await fs.remove(destination);
+			return downloadWithIntegrity(url, destination, integrity);
+		}
+	}
+
+	// download and verify integrity
+	return downloadWithIntegrity(url, destination, integrity);
+};
 
 /**
  * Grab the latest versions of all the libraries, download them, update our lockfile
@@ -202,7 +252,7 @@ async function ci() {
     const json = await fs.readJSON(path.join(__dirname, 'libraries-lock.json'));
     const destDir = path.join(__dirname, '../android/lib/');
     await fs.emptyDir(destDir);
-    return Promise.all(json.map(l => pipe(l.url, path.join(destDir, l.name))));
+    return Promise.all(json.map(l => downloadIfNecessary(l.url, path.join(destDir, l.name), l.integrity)));
 }
 
 (async function main() {
