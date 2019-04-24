@@ -10,7 +10,7 @@
     "upgrade": "node updater/index.js upgrade"
   },
   "author": "Gary Mathews",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "keywords": [
     "ti.playservices"
   ],
