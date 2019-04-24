@@ -32,10 +32,10 @@ describe('ti.playservices', function () {
 
 		describe('GOOGLE_PLAY_SERVICES_*', () => {
 			it('GOOGLE_PLAY_SERVICES_PACKAGE', () => {
-				expect(Barcode.GOOGLE_PLAY_SERVICES_PACKAGE).toEqual(jasmine.any(Number));
+				expect(Playservices.GOOGLE_PLAY_SERVICES_PACKAGE).toEqual(jasmine.any(Number));
 			});
 			it('GOOGLE_PLAY_SERVICES_VERSION_CODE', () => {
-				expect(Barcode.GOOGLE_PLAY_SERVICES_VERSION_CODE).toEqual(jasmine.any(Number));
+				expect(Playservices.GOOGLE_PLAY_SERVICES_VERSION_CODE).toEqual(jasmine.any(Number));
 			});
 		});
 	});
