@@ -50,4 +50,10 @@ public class PlayServicesModule extends KrollModule
 	public String getErrorString(int code) {
 		return this.api.getErrorString(code);
 	}
+
+	@Override
+	public String getApiName()
+	{
+		return "Ti.Playservices";
+	}
 }
