@@ -32,7 +32,7 @@ describe('ti.playservices', function () {
 
 		describe('GOOGLE_PLAY_SERVICES_*', () => {
 			it('GOOGLE_PLAY_SERVICES_PACKAGE', () => {
-				expect(Playservices.GOOGLE_PLAY_SERVICES_PACKAGE).toEqual(jasmine.any(Number));
+				expect(Playservices.GOOGLE_PLAY_SERVICES_PACKAGE).toEqual('com.google.android.gms');
 			});
 			it('GOOGLE_PLAY_SERVICES_VERSION_CODE', () => {
 				expect(Playservices.GOOGLE_PLAY_SERVICES_VERSION_CODE).toEqual(jasmine.any(Number));
