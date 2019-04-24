@@ -1,13 +1,16 @@
 /**
  * Axway Appcelerator Titanium - ti.playservices
- * Copyright (c) 2018-2019 by Axway. All Rights Reserved.
+ * Copyright (c) 2018-Present by Axway. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
 
+const request = require('request');
 const rp = require('request-promise');
 const cheerio = require('cheerio');
-const fs = require('fs');
+const fs = require('fs-extra');
+const path = require('path');
+const ssri = require('ssri');
 
 const repository = 'https://mvnrepository.com/artifact/com.google.android.gms';
 
@@ -90,10 +93,10 @@ async function getFiles (url, filter) {
     return list;
 }
 
-(async function () {
-
-    console.log(`Obtaining latest Play Services libraries...`);
-
+/**
+ * @param {string} repository maven repository to query
+ */
+async function gatherLibraries(repository) {
     // obtain Google Play Services repository libraries
     const libraries = await getList(repository);
     const blacklist = [
@@ -128,23 +131,133 @@ async function getFiles (url, filter) {
         'play-services'
     ];
 
-    for (const library of libraries) {
+    // filter valid libraries
+    return libraries.filter(library => {
+        return library.startsWith('play-') && !library.endsWith('license') && !blacklist.includes(library);
+    });
+}
 
-        // filter valid libraries
-        if (library.startsWith('play-') && !library.endsWith('license') && !blacklist.includes(library)) {
-
-            // obtain latest version of library
-            const version = await getLatestVersion(repository + '/' + library + '?repo=google');
-
-            // obtain library .aar
-            const archives = await getFiles(repository + '/' + library + '/' + version, 'aar');
-            for (const aar of archives) {
-
-                console.log(`  ${library}-${version}`);
-
-                // download aar
-                rp(aar).pipe(fs.createWriteStream(`../android/lib/${library}-${version}.aar`));
-            }
-        }
+/**
+ * 
+ * @param {string} destDir directory to place the downloaded AAR files
+ * @param {string} repository name of maven repository
+ * @param {string} library name of google library
+ * @param {string} [version='latest'] version to download. defaults to 'latest'. 'latest' will grab latest from maven repository.
+ * @returns {Promise<string} url of downloaded library/aar
+ */
+async function downloadLibrary(destDir, repository, library, version = 'latest') {
+    if (!version || version === 'latest') {
+        // obtain latest version of library
+        version = await getLatestVersion(`${repository}/${library}?repo=google`);
     }
+        
+    // obtain library .aar
+    const archives = await getFiles(`${repository}/${library}/${version}`, 'aar');
+    if (archives.length !== 1) {
+        throw new Error(`Expected single URL to download library: ${library}/${version}, but got: ${archives}`);
+    }
+    const url = archives[0];
+    const name = `${library}-${version}.aar`;
+    const destination = path.join(destDir, name);
+    // download aar
+    await download(url, destination);
+    // Add a sha/hash/integrity value?
+    const hash = await ssri.fromStream(fs.createReadStream(destination));
+    return {
+        url,
+        name,
+        integrity: hash.toString()
+    };
+}
+
+/**
+ * Downloads a file to a destination path.
+ * @param {string} url URL to download
+ * @param {string} dest destination file path
+ */
+async function download(url, dest) {
+    console.log(`  ${dest}`);
+    return new Promise((resolve, reject) => {
+        const writable = fs.createWriteStream(dest);
+        const readable = request(url).pipe(writable);
+        writable.on('finish', () => resolve(dest));
+        readable.on('error', reject);
+        writable.on('error', reject);
+    });
+}
+
+/**
+ * Downloads a file and verifies the integrity hash matches (or throws)
+ * @param {string} url URL to download
+ * @param {string} downloadPath path to save the file
+ * @param {string} integrity ssri integrity hash value to confirm contents
+ * @return {Promise<string>} the path to the downloaded (and verified) file
+ */
+async function downloadWithIntegrity(url, downloadPath, integrity) {
+	const file = await download(url, downloadPath);
+
+	// Verify integrity!
+	await ssri.checkStream(fs.createReadStream(file), integrity);
+	return file;
+}
+
+/**
+ * If necessary, downloads the given url and verifies the integrity hash. If the file already exists, verifies the integrity hash.
+ * If teh file exists and fails the integrity check, re-downloads from URL and verifies integrity hash.
+ * @param {string} url URL to download
+ * @param {string} destination where to save the file
+ * @param {string} integrity ssri integrity hash
+ * @returns {Promise<string>} path to file
+ */
+async function downloadIfNecessary(url, destination, integrity) {
+	if (!integrity) {
+		throw new Error(`No "integrity" value given for ${url}, may need to run "upgrade" to generate new library listing with updated integrity hashes.`);
+	}
+
+	// Check if file already exists and passes integrity check!
+	if (await fs.exists(destination)) {
+		try {
+			// if it passes integrity check, we're all good, return path to file
+			await ssri.checkStream(fs.createReadStream(destination), integrity);
+			// cached copy is still valid, integrity hash matches
+			return destination;
+		} catch (e) {
+			// hash doesn't match. Wipe the cached version and re-download
+			await fs.remove(destination);
+			return downloadWithIntegrity(url, destination, integrity);
+		}
+	}
+
+	// download and verify integrity
+	return downloadWithIntegrity(url, destination, integrity);
+};
+
+/**
+ * Grab the latest versions of all the libraries, download them, update our lockfile
+ */
+async function upgrade() {
+    console.log(`Obtaining latest Play Services libraries...`);
+    const libraries = await gatherLibraries(repository);
+    const destDir = path.join(__dirname, '../android/lib/');
+    await fs.emptyDir(destDir);
+    const downloaded = await Promise.all(libraries.map(l => downloadLibrary(destDir, repository, l)));
+    return fs.writeJSON(path.join(__dirname, 'libraries-lock.json'), downloaded, { spaces: '\t' });
+}
+
+/**
+ * Grab the exact versions of the libraries we've got written in our lockfile
+ */
+async function ci() {
+    console.log(`Obtaining Play Services libraries from lockfile...`);
+    const json = await fs.readJSON(path.join(__dirname, 'libraries-lock.json'));
+    const destDir = path.join(__dirname, '../android/lib/');
+    await fs.emptyDir(destDir);
+    return Promise.all(json.map(l => downloadIfNecessary(l.url, path.join(destDir, l.name), l.integrity)));
+}
+
+(async function main() {
+    if (process.argv.length >= 3 && process.argv[2] == 'upgrade') {
+        return upgrade();
+    }
+    return ci();
 })();

@@ -1,1 +1,11 @@
 .DS_Store
+
+node_modules/
+
+TESTS-*.xml
+
+android/build/
+android/java-sources.txt
+android/dist/
+android/lib/*.aar
+android/libs/
