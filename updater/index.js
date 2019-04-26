@@ -122,7 +122,6 @@ async function gatherLibraries(repository) {
         'play-services-tagmanager',
         'play-services-awareness',
         'play-services-clearcut',
-        'play-services-ads-lite',
         'play-services-phenotype',
         'play-services-vision-image-label',
         'play-services-tagmanager-v4-impl',
