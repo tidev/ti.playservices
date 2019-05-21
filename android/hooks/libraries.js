@@ -6,7 +6,6 @@
 'use strict';
 
 const fork = require('child_process').fork;
-const fs = require('fs-extra');
 const path = require('path');
 
 exports.id = 'ti.playservices.libraries';
