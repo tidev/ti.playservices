@@ -60,6 +60,11 @@
 		"integrity": "sha512-67FA5xN63uD9faj2y69Ob9KQNS+6YrP8MyZ7SpNmYIv8qtNoPmUEz+Rui2rNUo6kwVu2uqgLSMSvf/8taQW6rQ=="
 	},
 	{
+		"url": "https://maven.google.com/com/google/android/gms/play-services-ads-lite/17.2.0/play-services-ads-lite-17.2.0.aar",
+		"name": "play-services-ads-lite-17.2.0.aar",
+		"integrity": "sha512-PhKv5CpZIjL3Ig3A48/aSQW5I1+zyKCjBOdz8o6MBySDNiz8T+KE9rTxe155CWRjT0d5LlcwaNwmBsMZLVGrhQ=="
+	},
+	{
 		"url": "https://maven.google.com/com/google/android/gms/play-services-wallet/16.0.1/play-services-wallet-16.0.1.aar",
 		"name": "play-services-wallet-16.0.1.aar",
 		"integrity": "sha512-ECvNCRt9iPl6osp2ij/J10YKBji3phyxpBJorI/8MYfOOoYplHrrEGATEVQqoJhQkbIysZ9wW1SzLUmUtrf65g=="
