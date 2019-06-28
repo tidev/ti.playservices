@@ -7,7 +7,7 @@ const ENV = process.env;
 
 // Add links to artifacts we've stuffed into the ENV.ARTIFACTS variable
 async function linkToArtifacts() {
-	if (ENV.BUILD_STATUS === 'SUCCESS' || ENV.BUILD_STATUS === 'UNSTABLE') {
+	if (ENV.ARTIFACTS) {
 		const artifacts = ENV.ARTIFACTS.split(';');
 		if (artifacts.length !== 0) {
 			const artifactsListing = '- ' + artifacts.map(a => danger.utils.href(`${ENV.BUILD_URL}artifact/${a}`, a)).join('\n- ');
