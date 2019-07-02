@@ -68,7 +68,10 @@ To include Play Services libraries with your native module include the module as
 For a detailed API example please see [android/example/app.js](https://github.com/appcelerator-modules/ti.playservices/blob/master/android/example/app.js)
 
 ## Build
-`appc run -p android --build-only` from the `android` directory
+1. Create a `lib` folder in the `android` directory
+2. Run `npm install node .` from the `updater` directory
+3. Run `npm install && node .` from the `updater` directory
+4. Run `appc run -p android --build-only` from the `android` directory
 
 ## Author
 Axway
