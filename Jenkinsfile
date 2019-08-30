@@ -2,5 +2,5 @@
 library 'pipeline-library@modules-npm'
 
 buildModule {
-	sdkVersion = '8.1.0.v20190423074844' // use a master build with ARM64 support
+	sdkVersion = '8.1.1.GA' // use a master build with ARM64 support
 }
