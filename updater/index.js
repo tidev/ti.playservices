@@ -142,7 +142,7 @@ async function gatherLibraries(repository) {
  * @param {string} repository name of maven repository
  * @param {string} library name of google library
  * @param {string} [version='latest'] version to download. defaults to 'latest'. 'latest' will grab latest from maven repository.
- * @returns {Promise<string} url of downloaded library/aar
+ * @returns {Promise<object>} url of downloaded library/aar, name, integrity hash
  */
 async function downloadLibrary(destDir, repository, library, version = 'latest') {
     if (!version || version === 'latest') {
@@ -240,7 +240,9 @@ async function upgrade() {
     const destDir = path.join(__dirname, '../android/lib/');
     await fs.emptyDir(destDir);
     const downloaded = await Promise.all(libraries.map(l => downloadLibrary(destDir, repository, l)));
-    return fs.writeJSON(path.join(__dirname, 'libraries-lock.json'), downloaded, { spaces: '\t' });
+    // sort by name!
+    const sortedByName = downloaded.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    return fs.writeJSON(path.join(__dirname, 'libraries-lock.json'), sortedByName, { spaces: '\t' });
 }
 
 /**
