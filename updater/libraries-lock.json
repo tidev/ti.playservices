@@ -15,11 +15,6 @@
 		"integrity": "sha512-0TQxBUCW/qwNgi4XsVZ47+CSakqGB0K+IkD29XaixMsdc3BFZ/G4K3jbXXxNoKbpZJ4FNYxNQEmfTCptFBKmdw=="
 	},
 	{
-		"url": "https://maven.google.com/com/google/android/gms/play-services-ads-lite/18.2.0/play-services-ads-lite-18.2.0.aar",
-		"name": "play-services-ads-lite-18.2.0.aar",
-		"integrity": "sha512-6B1XTyeb4nW9+A//ZouePcjmQb4xh2TolvumzmcT56vcCdFT3ujggc1jf3iGA7x3cyLrvVd7rakI7c8EBHrXFw=="
-	},
-	{
 		"url": "https://maven.google.com/com/google/android/gms/play-services-analytics/17.0.0/play-services-analytics-17.0.0.aar",
 		"name": "play-services-analytics-17.0.0.aar",
 		"integrity": "sha512-iaxymqVkLnZPbkSfSV/4z9wffcDux1XzMWcFM1d0KMNkPZ8/wFOG+oBT+uOakKuiGBtgFYjuSWcMH+jCAKYYAQ=="
