@@ -100,6 +100,7 @@ async function gatherLibraries(repository) {
     // obtain Google Play Services repository libraries
     const libraries = await getList(repository);
     const blacklist = [
+        'play-services-ads-lite',
         'play-services-contextmanager',
         'play-services-measurement',
         'play-services-instantapps',
