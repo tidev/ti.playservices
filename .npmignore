@@ -1,2 +1,9 @@
 android/example/
 android/hooks/libraries.js
+
+test/
+updater/
+apidoc/
+README.md
+Jenkinsfile
+dangerfile.js
