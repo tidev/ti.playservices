@@ -2,6 +2,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 
+// This is required if playservices-ads-lite is bundled
 function projectManagerHook(projectManager) {
 	projectManager.once('prepared', function () {
 		const tiapp = path.join(this.karmaRunnerProjectPath, 'tiapp.xml');
