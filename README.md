@@ -32,7 +32,21 @@ The `PlayServices` variable is a reference to the module. Make API calls using t
     const playServicesAvailable = PlayServices.isGooglePlayServicesAvailable();
 ```
 
-It is highly recommended to detect availability issues before using Play Services:
+As of version 17.1.0 (only supported by Titanium Mobile SDK 9.0.0 and above), the `ti.playservices` module will automatically check if
+Google Play Services is installed and up-to-date on the device upon app startup. If not, the module will prompt the
+end-user to install/update it. The main app script (ie: `app.js` or `alloy.js`) will not be executed until the end-user has
+successfully installed/updated Google Play Services or if it is already up-to-date.
+
+If you do not want `ti.playservices` to check Google Play Services on app startup, then you can disable the above mentioned behavior
+by setting the below property in the `tiapp.xml` file.
+
+```xml
+<ti:app xmlns:ti="http://ti.appcelerator.org">
+	<property name="ti.playservices.validate.on.startup" type="bool">false</property>
+</ti:app>
+```
+
+If you disable the above behavior, then it is highly recommended to detect availability issues yourself as shown below.
 ```JS
 const PlayServices = require('ti.playservices');
 
