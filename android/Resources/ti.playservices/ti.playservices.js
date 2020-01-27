@@ -3,6 +3,7 @@ const MAX_RETRY = 1;
 function makeGooglePlayServicesAvailable (callback, _retry = 0) {
     let result = {
         success: false,
+        code: undefined,
         message: undefined
     };
 
@@ -12,13 +13,14 @@ function makeGooglePlayServicesAvailable (callback, _retry = 0) {
         const playServicesResult = PlayServices.isGooglePlayServicesAvailable();
         const playServicesVersion = PlayServices.GOOGLE_PLAY_SERVICES_VERSION_CODE;
 
-        // Listener callback to determin when the user has returned to the app
+        // Listener callback to determine when the user has returned to the app
         function playServicesResume () {
             Ti.App.removeEventListener('resume', playServicesResume);
             makeGooglePlayServicesAvailable(callback, ++_retry);
         };
 
         // Google Play Services is available.
+        result.code = playServicesResult;
         if (playServicesResult === PlayServices.RESULT_SUCCESS) {
             result.success = true;
             result.message = `Google Play Services is available. (version: ${playServicesVersion})`;

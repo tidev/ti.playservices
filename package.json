@@ -1,6 +1,6 @@
 {
   "name": "@titanium/ti.playservices",
-  "version": "16.1.5",
+  "version": "17.1.0",
   "description": "Titanium Google Play Services module.",
   "scripts": {
     "test": "karma start test/unit/karma.unit.config.js",
