@@ -3,6 +3,7 @@
 // requires
 const junit = require('@seadub/danger-plugin-junit').default;
 const dependencies = require('@seadub/danger-plugin-dependencies').default;
+const moduleLint = require('@seadub/danger-plugin-titanium-module').default;
 const ENV = process.env;
 
 // Add links to artifacts we've stuffed into the ENV.ARTIFACTS variable
@@ -23,6 +24,7 @@ async function main() {
 		junit({ pathToReport: './TESTS-*.xml' }),
 		dependencies({ type: 'npm' }),
 		linkToArtifacts(),
+		moduleLint(),
 	]);
 }
 main()
