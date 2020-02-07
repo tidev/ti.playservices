@@ -42,12 +42,12 @@ description: |
 methods:    
   - name: makeGooglePlayServicesAvailable
     summary: Attempts to make Google Play services available on this device.
-    description: `callback` parameter is only available since 16.1.1.
+    description: The `callback` parameter is only available since 16.1.1.
     since: "11.0.40"
     parameters:
       - name: callback
         summary: Callback fired with the result determining Google Play Services availability.
-        type: Callback<Object>
+        type: Callback<Modules.PlayServices.AvailableCallbackObject>
 
   - name: isGooglePlayServicesAvailable
     summary: Verifies that Google Play services is installed and enabled on this device.
@@ -57,7 +57,7 @@ methods:
     since: "11.0.40"
     returns:
         type: Number
-        constant: [Modules.PlayServices.RESULT_*]
+        constants: [Modules.PlayServices.RESULT_*]
 
   - name: isUserResolvableError
     summary: Checks to see if device is configured for Touch ID authentication.
@@ -113,3 +113,20 @@ properties:
     type: Number
     permission: read-only
     since: "11.0.40"
+
+---
+name: Modules.PlayServices.AvailableCallbackObject
+summary: Object passed to <Module.PlayServices.makeGooglePlayServicesAvailable> callback
+properties:
+  - name: code
+    type: Number
+    summary: The result of detrmining whether the service is available
+    constants: Modules.PlayServices.RESULT_*
+
+  - name: success
+    type: Boolean
+    summary: whether the operation was successful
+
+  - name: message
+    type: String
+    summary: details on operation success or error
