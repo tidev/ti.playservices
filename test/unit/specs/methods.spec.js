@@ -10,6 +10,7 @@ describe('ti.playservices', () => {
 		});
 
 		describe('#isUserResolvableError()', () => {
+			// eslint-disable-next-line jasmine/no-spec-dupes
 			it('is a function', () => {
 				expect(Playservices.isUserResolvableError).toEqual(jasmine.any(Function));
 			});
@@ -17,6 +18,7 @@ describe('ti.playservices', () => {
 		});
 
 		describe('#getErrorString()', () => {
+			// eslint-disable-next-line jasmine/no-spec-dupes
 			it('is a function', () => {
 				expect(Playservices.getErrorString).toEqual(jasmine.any(Function));
 			});
