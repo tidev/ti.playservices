@@ -28,7 +28,7 @@
   "main": "updater",
   "devDependencies": {
     "@seadub/danger-plugin-dependencies": "^0.1.0",
-    "@seadub/danger-plugin-junit": "^0.1.1",
+    "@seadub/danger-plugin-junit": "^0.1.2",
     "@seadub/danger-plugin-titanium-module": "0.0.7",
     "cheerio": "^1.0.0-rc.2",
     "danger": "^7.1.0",
