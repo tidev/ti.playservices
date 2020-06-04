@@ -1,6 +1,6 @@
 {
   "name": "@titanium-sdk/ti.playservices",
-  "version": "17.1.1",
+  "version": "17.3.0",
   "description": "Titanium Google Play Services module.",
   "scripts": {
     "ci": "node updater/index.js ci",
