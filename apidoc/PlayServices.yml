@@ -12,33 +12,40 @@ description: |
     Add the module as a dependency to your application by adding a **`<module>`** item to the
     **`<modules>`** element of your `tiapp.xml` file:
 
-        <ti:app>
-          ...
-          <modules>
-            <module platform="android">ti.playservices</module>
-          </modules>
-          ...
-        </ti:app>
+    ``` xml
+    <ti:app>
+      <!-- ... -->
+      <modules>
+        <module platform="android">ti.playservices</module>
+      </modules>
+      <!-- ... -->
+    </ti:app>
+    ```
 
     Or include the module as a dependency to a native module by adding a **`<module>`** item to the
     **`<modules>`** element of your `timodule.xml` file:
 
-        <ti:module>
-          ...
-          <modules>
-            <module platform="android">ti.playservices</module>
-          </modules>
-          ...
-        </ti:module>
+    ``` xml
+    <ti:module>
+      <!-- ... -->
+      <modules>
+        <module platform="android">ti.playservices</module>
+      </modules>
+      <!-- ... -->
+    </ti:module>
+    ```
 
     Use `require()` to access the module from JavaScript:
 
-        var PlayServices = require('ti.playservices');
+    ``` javascript
+    var PlayServices = require('ti.playservices');
+    ```
 
     The `PlayServices` variable is a reference to the module. Make API calls using this reference:
 
-        var playServicesAvailable = PlayServices.isGooglePlayServicesAvailable();
-
+    ``` javascript
+    var playServicesAvailable = PlayServices.isGooglePlayServicesAvailable();
+    ```
 methods:    
   - name: makeGooglePlayServicesAvailable
     summary: Attempts to make Google Play services available on this device.
