@@ -1,4 +1,3 @@
-
 exports.execute = (finished) => {
 	// Check if Google Play Services validation is enabled on startup. (Enabled by default.)
 	// Can be disabled via "tiapp.xml" entry:
