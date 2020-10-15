@@ -1,4 +1,3 @@
-
 /**
  * Checks if Google Play Services is available (ie: installed/updated) on devices that support it.
  * If not available, will display Google's standard dialog asking end-user to install/update it.
