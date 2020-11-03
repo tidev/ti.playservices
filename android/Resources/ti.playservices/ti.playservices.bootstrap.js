@@ -57,5 +57,12 @@ function showUI(finished) {
 //   <property name="ti.playservices.validate.on.startup" type="bool">false</property>
 // </ti:app>
 if (Ti.App.Properties.getBool('ti.playservices.validate.on.startup', true)) {
-	exports.showUI = showUI;
+	if (Ti.UI.hasSession !== undefined) {
+		// Titanium supports backgrounding and showing multiple UI sessions with a single JS runtime instance.
+		// Show bootstrap's UI every time a new UI session has been created.
+		exports.showUI = showUI;
+	} else {
+		// Older Titanium versions will only run this bootstrap once per JS runtime instance.
+		exports.execute = showUI;
+	}
 }
