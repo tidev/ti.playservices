@@ -1,9 +1,9 @@
 
 dependencies {
 	// Needed to check for Google Play Services availability on device.
-	implementation 'com.google.android.gms:play-services-base:17.1.0'
+	implementation 'com.google.android.gms:play-services-base:17.5.0'
 
 	// App devs expect adding "ti.playservices" will enable "Fused Location" support to "Ti.Gelocation" APIs.
 	// So, we must add this library to support it, even though this module doesn't use this library at all.
-	implementation 'com.google.android.gms:play-services-location:17.0.0'
+	implementation 'com.google.android.gms:play-services-location:17.1.0'
 }
