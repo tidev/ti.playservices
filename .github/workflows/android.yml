@@ -25,6 +25,11 @@ jobs:
       with:
         node-version: '16.x'
 
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
     - name: Cache Node.js modules
       id: node-cache
       uses: actions/cache@v2
@@ -55,9 +60,12 @@ jobs:
     - run: npm i -g titanium
       name: Install Titanium CLI
 
-# TODO: Cache sdk install
     - run: ti sdk install 11.1.1.GA --force
       name: Install SDK 11.1.1.GA
+
+    - name: Set up Homebrew
+      id: set-up-homebrew
+      uses: Homebrew/actions/setup-homebrew@master
 
     - name: Install ccache
       run: brew install ccache
