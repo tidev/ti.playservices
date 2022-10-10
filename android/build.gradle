@@ -5,5 +5,5 @@ dependencies {
 
 	// App devs expect adding "ti.playservices" will enable "Fused Location" support to "Ti.Gelocation" APIs.
 	// So, we must add this library to support it, even though this module doesn't use this library at all.
-	implementation 'com.google.android.gms:play-services-location:19.0.1'
+	implementation 'com.google.android.gms:play-services-location:20.0.0'
 }
