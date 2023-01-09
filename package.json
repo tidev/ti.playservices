@@ -45,7 +45,7 @@
     "cheerio": "^1.0.0-rc.2",
     "clang-format": "^1.4.0",
     "commitizen": "^4.0.3",
-    "danger": "^10.4.0",
+    "danger": "^11.2.1",
     "eslint": "^7.9.0",
     "eslint-config-axway": "^6.0.1",
     "eslint-plugin-jasmine": "^4.1.0",
