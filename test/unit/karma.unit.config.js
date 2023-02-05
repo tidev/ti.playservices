@@ -33,7 +33,7 @@ module.exports = config => {
 			}
 		],
 		titanium: {
-			sdkVersion: config.sdkVersion || '9.3.2.GA'
+			sdkVersion: config.sdkVersion || '12.0.0.GA'
 		},
 		customLaunchers: {
 			android: {
@@ -46,13 +46,14 @@ module.exports = config => {
 		browsers: [ 'android' ],
 		client: {
 			jasmine: {
-				random: false
+				random: false,
+				timeoutInterval: 1200000
 			}
 		},
 		singleRun: true,
 		retryLimit: 0,
 		concurrency: 1,
-		captureTimeout: 600000,
+		captureTimeout: 1200000,
 		logLevel: config.LOG_DEBUG
 	});
 };
