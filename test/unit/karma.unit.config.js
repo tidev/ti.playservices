@@ -54,6 +54,9 @@ module.exports = config => {
 		retryLimit: 0,
 		concurrency: 1,
 		captureTimeout: 1200000,
+		browserDisconnectTolerance: 3,
+		browserDisconnectTimeout: 1200000,
+		browserNoActivityTimeout: 1200000,
 		logLevel: config.LOG_DEBUG
 	});
 };
