@@ -14,4 +14,4 @@ name: playservices
 moduleid: ti.playservices
 guid: 32184149-411f-436b-92a8-c6ddb98a5fb6
 platform: android
-minsdk: 9.0.0
+minsdk: 12.1.0
