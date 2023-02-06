@@ -32,7 +32,7 @@ jobs:
 
     - name: Cache Node.js modules
       id: node-cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: node_modules
         key: ${{ runner.OS }}-node-modules-${{ hashFiles('package-lock.json') }}
@@ -45,7 +45,7 @@ jobs:
       if: steps.node-cache.outputs.cache-hit != 'true'
 
     - name: Cache Gradle packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           ~/.gradle/caches
@@ -60,8 +60,8 @@ jobs:
     - run: npm i -g titanium
       name: Install Titanium CLI
 
-    - run: ti sdk install 11.1.1.GA --force
-      name: Install SDK 11.1.1.GA
+    - run: ti sdk install --branch master 12.1.0.v20221229113413 --force
+      name: Install SDK 12.1.0
 
     - name: Set up Homebrew
       id: set-up-homebrew
@@ -71,7 +71,7 @@ jobs:
       run: brew install ccache
 
     - name: Retrieve ccache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.CCACHE_DIR }}
         key: ${{ runner.os }}-ccache-${{ github.sha }}
@@ -80,10 +80,12 @@ jobs:
 
     - name: Build and Test
       uses: reactivecircus/android-emulator-runner@v2
+      env:
+        ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
       with:
         api-level: 29
         target: playstore
-        script: npm run test:android -- --sdkVersion 11.1.1.GA
+        script: npm run test:android -- --sdkVersion 12.1.0.v20221229113413
         disable-animations: false # defaulting to true, the commands sent to emulator to do this sometimes run too quickly after boot and cause "adb: device offline" failures
 
     - name: Show summary of ccache configuration and statistics counters
