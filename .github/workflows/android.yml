@@ -12,7 +12,7 @@ on:
 
 jobs:
   android:
-    runs-on: ubuntu-latest
+    runs-on: macos-13
     name: Android
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
@@ -63,20 +63,20 @@ jobs:
     - run: ti sdk install 12.2.1.GA
       name: Install SDK 12.2.1
 
-    # - name: Set up Homebrew
-    #   id: set-up-homebrew
-    #   uses: Homebrew/actions/setup-homebrew@master
-    #
-    # - name: Install ccache
-    #   run: brew install ccache
-    #
-    # - name: Retrieve ccache
-    #   uses: actions/cache@v3
-    #   with:
-    #     path: ${{ env.CCACHE_DIR }}
-    #     key: ${{ runner.os }}-ccache-${{ github.sha }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-ccache-
+    - name: Set up Homebrew
+      id: set-up-homebrew
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: Install ccache
+      run: brew install ccache
+
+    - name: Retrieve ccache
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ${{ runner.os }}-ccache-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-
 
     - name: Build and Test
       uses: reactivecircus/android-emulator-runner@v2
