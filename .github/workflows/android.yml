@@ -57,7 +57,7 @@ jobs:
     - run: npm run lint:android
       name: Lint
 
-    - run: npm i -g titanium
+    - run: npm i -g titanium@6.1.1
       name: Install Titanium CLI
 
     - run: ti sdk install 12.2.1.GA
