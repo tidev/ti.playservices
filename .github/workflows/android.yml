@@ -84,13 +84,9 @@ jobs:
         ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
       with:
         api-level: 29
-        target: google_apis
+        target: playstore
         script: npm run test:android -- --sdkVersion 12.2.1.GA
-        arch: x86_64
-        profile: Nexus 6
-        ram-size: 2048MB
-        force-avd-creation: false
-        emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
         disable-animations: true
 
     - name: Show summary of ccache configuration and statistics counters
