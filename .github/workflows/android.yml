@@ -84,9 +84,14 @@ jobs:
         ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
       with:
         api-level: 29
-        target: playstore
+        target: google_apis
         script: npm run test:android -- --sdkVersion 12.2.1.GA
-        disable-animations: false # defaulting to true, the commands sent to emulator to do this sometimes run too quickly after boot and cause "adb: device offline" failures
+        arch: x86_64
+        profile: Nexus 6
+        ram-size: 2048MB
+        force-avd-creation: false
+        emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        disable-animations: true
 
     - name: Show summary of ccache configuration and statistics counters
       run: ccache --show-stats
