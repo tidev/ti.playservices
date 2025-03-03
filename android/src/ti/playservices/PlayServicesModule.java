@@ -10,7 +10,6 @@ import android.app.Activity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.Task;
-import java.util.concurrent.CancellationException;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
@@ -79,13 +78,10 @@ public class PlayServicesModule extends KrollModule
 		}
 
 		// Fetch the top-most activity.
-		Activity activity = TiApplication.getAppCurrentActivity();
+		Activity activity = TiApplication.getAppRootOrCurrentActivity();
 		if (activity == null) {
-			activity = TiApplication.getInstance().getRootActivity();
-			if (activity == null) {
-				callback.callAsync(getKrollObject(), createEventForMakeAvailable(resultCode));
-				return;
-			}
+			callback.callAsync(getKrollObject(), createEventForMakeAvailable(resultCode));
+			return;
 		}
 
 		// Display Google's standard dialog asking end-user to update Google Play Services.
