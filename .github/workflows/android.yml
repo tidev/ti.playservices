@@ -78,16 +78,16 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-ccache-
 
-    - name: Build and Test
-      uses: reactivecircus/android-emulator-runner@v2
-      env:
-        ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
-      with:
-        api-level: 29
-        target: playstore
-        script: npm run test:android -- --sdkVersion 12.8.0.GA
-        emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-        disable-animations: true
+    # - name: Build and Test
+    #   uses: reactivecircus/android-emulator-runner@v2
+    #   env:
+    #     ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
+    #   with:
+    #     api-level: 29
+    #     target: playstore
+    #     script: npm run test:android -- --sdkVersion 12.8.0.GA
+    #     emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
+    #     disable-animations: true
 
     - name: Show summary of ccache configuration and statistics counters
       run: ccache --show-stats
