@@ -10,10 +10,16 @@ import android.app.Activity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.Task;
+import com.google.android.play.agesignals.AgeSignalsManager;
+import com.google.android.play.agesignals.AgeSignalsManagerFactory;
+import com.google.android.play.agesignals.AgeSignalsRequest;
+import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus;
+
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiC;
 
@@ -59,6 +65,34 @@ public class PlayServicesModule extends KrollModule
 	public boolean isUserResolvableError(int code)
 	{
 		return this.api.isUserResolvableError(code);
+	}
+
+	@Kroll.method
+	public void requestAge() {
+		AgeSignalsManager ageSignalsManager =
+				AgeSignalsManagerFactory.create(TiApplication.getInstance());
+		ageSignalsManager
+				.checkAgeSignals(AgeSignalsRequest.builder().build())
+				.addOnFailureListener(exception -> {
+					Log.e(TAG, "Error: " + exception.getMessage());
+					KrollDict kd = new KrollDict();
+					kd.put("success", false);
+					kd.put("error", exception.getMessage());
+					fireEvent("ageVerification", kd);
+				})
+				.addOnSuccessListener(
+						ageSignalsResult -> {
+							String installId = ageSignalsResult.installId();
+							KrollDict kd = new KrollDict();
+							if (ageSignalsResult.userStatus().equals(AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED)) {
+								kd.put("verified", false);
+							} else {
+								kd.put("verified", true);
+							}
+							kd.put("success", true);
+							kd.put("installId", installId);
+							fireEvent("ageVerification", kd);
+						});
 	}
 
 	@Kroll.method
