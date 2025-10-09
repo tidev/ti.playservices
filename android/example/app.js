@@ -10,8 +10,10 @@ if (playServicesResult == PlayServices.RESULT_SUCCESS) {
 
 PlayServices.addEventListener("ageVerification", function(e){
 	console.log("success", e.success);
-	console.log("installId", e.installId);
-	console.log("verified", e.verified);
+	if (e.success) {
+		console.log("installId", e.installId);
+		console.log("verified", e.verified);
+	}
 })
 
-PlayServices.requestAge();s
+PlayServices.requestAge();
