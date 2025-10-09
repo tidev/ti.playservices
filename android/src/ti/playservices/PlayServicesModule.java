@@ -14,7 +14,6 @@ import com.google.android.play.agesignals.AgeSignalsManager;
 import com.google.android.play.agesignals.AgeSignalsManagerFactory;
 import com.google.android.play.agesignals.AgeSignalsRequest;
 import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus;
-
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
@@ -68,31 +67,29 @@ public class PlayServicesModule extends KrollModule
 	}
 
 	@Kroll.method
-	public void requestAge() {
-		AgeSignalsManager ageSignalsManager =
-				AgeSignalsManagerFactory.create(TiApplication.getInstance());
-		ageSignalsManager
-				.checkAgeSignals(AgeSignalsRequest.builder().build())
-				.addOnFailureListener(exception -> {
-					Log.e(TAG, "Error: " + exception.getMessage());
-					KrollDict kd = new KrollDict();
-					kd.put("success", false);
-					kd.put("error", exception.getMessage());
-					fireEvent("ageVerification", kd);
-				})
-				.addOnSuccessListener(
-						ageSignalsResult -> {
-							String installId = ageSignalsResult.installId();
-							KrollDict kd = new KrollDict();
-							if (ageSignalsResult.userStatus().equals(AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED)) {
-								kd.put("verified", false);
-							} else {
-								kd.put("verified", true);
-							}
-							kd.put("success", true);
-							kd.put("installId", installId);
-							fireEvent("ageVerification", kd);
-						});
+	public void requestAge()
+	{
+		AgeSignalsManager ageSignalsManager = AgeSignalsManagerFactory.create(TiApplication.getInstance());
+		ageSignalsManager.checkAgeSignals(AgeSignalsRequest.builder().build())
+			.addOnFailureListener(exception -> {
+				Log.e(TAG, "Error: " + exception.getMessage());
+				KrollDict kd = new KrollDict();
+				kd.put("success", false);
+				kd.put("error", exception.getMessage());
+				fireEvent("ageVerification", kd);
+			})
+			.addOnSuccessListener(ageSignalsResult -> {
+				String installId = ageSignalsResult.installId();
+				KrollDict kd = new KrollDict();
+				if (ageSignalsResult.userStatus().equals(AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED)) {
+					kd.put("verified", false);
+				} else {
+					kd.put("verified", true);
+				}
+				kd.put("success", true);
+				kd.put("installId", installId);
+				fireEvent("ageVerification", kd);
+			});
 	}
 
 	@Kroll.method
