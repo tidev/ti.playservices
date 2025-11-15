@@ -8,7 +8,7 @@
 </p>
 
 ## Requirements
-- Titanium Mobile SDK 7.0.0 or later (release 12/2017)
+- Titanium SDK 12.8.0 or later
 
 ## Example
 Add the module as a dependency to your application by adding a `<module>` item to the `<modules>` element of your `tiapp.xml` file:
@@ -32,7 +32,7 @@ The `PlayServices` variable is a reference to the module. Make API calls using t
     const playServicesAvailable = PlayServices.isGooglePlayServicesAvailable();
 ```
 
-As of version 17.1.0 (only supported by Titanium Mobile SDK 9.0.0 and above), the `ti.playservices` module will automatically check if
+As of version 17.1.0, the `ti.playservices` module will automatically check if
 Google Play Services is installed and up-to-date on the device upon app startup. If not, the module will prompt the
 end-user to install/update it. The main app script (ie: `app.js` or `alloy.js`) will not be executed until the end-user has
 successfully installed/updated Google Play Services or if it is already up-to-date.
