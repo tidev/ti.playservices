@@ -82,10 +82,12 @@ To include Play Services libraries with your native module include the module as
 For a detailed API example please see [android/example/app.js](https://github.com/appcelerator-modules/ti.playservices/blob/master/android/example/app.js)
 
 ## Build
-1. Create a `lib` folder in the `android` directory
-2. Run `npm install node .` from the `updater` directory
-3. Run `npm install && node .` from the `updater` directory
-4. Run `appc run -p android --build-only` from the `android` directory
+1. Run `npm install` from the root of the repository to install the development dependencies
+2. Run `ti build -p android --build-only` from the `android` directory
+
+The packaged module is written to `android/dist/`. The Google Play Services libraries
+are resolved by Gradle from the dependencies declared in `android/build.gradle`, so
+there is no separate download or lockfile step.
 
 ## Author
 Axway
