@@ -12,7 +12,7 @@ on:
 
 jobs:
   android:
-    runs-on: macos-26
+    runs-on: ubuntu-latest
     name: Android
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
@@ -27,7 +27,7 @@ jobs:
 
     - uses: actions/setup-java@v6
       with:
-        distribution: 'adopt'
+        distribution: 'temurin'
         java-version: '24'
 
     - name: Cache Node.js modules
@@ -63,12 +63,8 @@ jobs:
     - run: ti sdk install 13.4.1.GA
       name: Install Titanium SDK
 
-    - name: Set up Homebrew
-      id: set-up-homebrew
-      uses: Homebrew/actions/setup-homebrew@master
-
     - name: Install ccache
-      run: brew install ccache
+      run: sudo apt-get update && sudo apt-get install -y ccache
 
     - name: Retrieve ccache
       uses: actions/cache@v6
@@ -77,6 +73,9 @@ jobs:
         key: ${{ runner.os }}-ccache-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-ccache-
+
+    - run: ti build -p android -b -d android --sdk 13.4.1.GA
+      name: Build module
 
     # - name: Build and Test
     #   uses: reactivecircus/android-emulator-runner@v2
