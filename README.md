@@ -8,7 +8,7 @@
 </p>
 
 ## Requirements
-- Titanium SDK 12.8.0 or later
+- Titanium SDK 13.4.0 or later
 
 ## Example
 Add the module as a dependency to your application by adding a `<module>` item to the `<modules>` element of your `tiapp.xml` file:
